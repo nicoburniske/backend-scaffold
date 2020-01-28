@@ -2,3 +2,4 @@
 */target/
 *.iml
 *.properties
+.DS_Store
