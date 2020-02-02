@@ -3,3 +3,6 @@
 *.iml
 *.properties
 .DS_Store
+.classpath
+.project
+org.eclipse.*
