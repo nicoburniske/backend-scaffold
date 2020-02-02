@@ -1,171 +1,18 @@
-# Testing the Note API
+# Testing the API
 
-This API is for getting, creating, and updating note objects. All request and response bodies will be of type JSON and include an
-appropriate `Content-Type: application/json` header.
+This is a mirror of the `main/` directory used for testing all of its source files. We use the [Vert.x Unit Testing Framework](https://vertx.io/docs/vertx-unit/java/#vertx_integration) to accomplish this. The naming convention we use is `...Test.java`
 
-## `GET /api/note`
+## Running Tests:
 
-Used for getting one or all of the notes in the database.
+#### IMPORTANT: Before proceeding, please confirm that an instance of the API is running. Refer to the README in the root directory to learn how to accomplish this.
 
-### Query Parameters
+In another terminal tab, navigate to the root `api/` directory. In `api/`, if you haven't already, run `mvn clean install` to set up your dependencies. Run `mvn clean test` to see your tests in action.
 
-##### note_id: INTEGER
+## Writing Tests:
+You will need to import several libraries from Vert.x core, Vert.x unit, and JUnit. Tests are placed into a public class by the same name as the file. 
 
-- Get a note that has this specific ID.
+Classes need to be annotated with `@RunWith(VertxUnitRunner.class)` for Vert.x to accept our tests. In a testing class, you need a method with a `@Before` annotation to initialize resources, the actual testing methods with a `@Test` annotation, and finally a method with an `@After` annotation to clean up our resources. You will most likely be receiving/sending JSON responses, so please read through the [documentation](https://vertx.io/docs/apidocs/io/vertx/core/json/JsonObject.html) for the `JsonObject` class if you get stuck when trying to parse certain data types.
 
-### Responses
+An example can be found in `rest/ApiRouterTest.java`. For a complete reference, here's some [boilerplate code](https://github.com/vert-x3/vertx-examples/blob/master/unit-examples/src/test/java/io/vertx/example/unit/test/MyJUnitTest.java). 
 
-#### `200 OK`
-
-Every thing is okay.
-
-If there were any potentially confusing fields in the response body you
-would explain what they mean and what they're for here.
-
-```json
-{
-  "status": "OK",
-  "notes": [
-    {
-      "id": INTEGER,
-      "title": STRING,
-      "content": STRING,
-      "date": DATE
-    },
-    ...
-  ]
-}
-```
-
-A **DATE** is a String in the format: "MM-DD-YYYY HH:MM:ss"
-
-
-#### `400 BAD REQUEST`
-
-This happens if the client sends a request that does not conform to the standard 
-outlined above.
-
-```json
-{
-  "status": "BAD REQUEST",
-  "reason": STRING
-}
-```
-
-
-## `POST /api/note`
-
-Used for creating one or more notes to be stored in the database.
-
-### Request Body
-
-```json
-{
-  "notes": [
-    {
-      "title": STRING,
-      "content": STRING
-    },
-    ...
-  ]
-}
-```
-
-### Responses
-
-#### `201 OK`
-
-The notes were successfully created. Returns all the created notes as they would be show in a GET request so that the frontend can find out note's assigned ID numbers.
-
-```json
-{
-  "status": "OK",
-  "notes": [
-    {
-      "id": INTEGER,
-      "title": STRING,
-      "content": STRING,
-      "date": DATE
-    },
-    ...
-  ]
-}
-```
-
-#### `400 BAD REQUEST`
-
-The request body was malformed according to the specification.
-
-```json
-{
-  "status": "BAD REQUEST",
-  "reason": STRING
-}
-```
-
-
-## `PUT /api/note/:noteid`
-
-Used to update a specific note.
-
-### Route Parameters
-
-#### note_id: INTEGER
-
-- Update the note with this id number
-
-### Request Body
-
-```json
-{
-  "note": {
-    "title": STRING,
-    "content": STRING
-  }
-}
-```
-
-### Responses
-
-#### `200 OK`
-
-The note was updated successfully, returns the new note object.
-
-```json
-{
-  "status": "OK",
-  "note": {
-      "id": INTEGER,
-      "title": STRING,
-      "content": STRING,
-      "date": DATE
-  }
-}
-```
-
-#### `400 BAD REQUEST`
-
-The request body was malformed according to the specification OR if the note_id does not map to any note in the database.
-
-```json
-{
-  "status": "BAD REQUEST",
-  "reason": STRING
-}
-```
-
-## `DELETE /api/note/:noteid`
-
-Used to delete a specific note.
-
-### Route Parameters
-
-#### note_id: INTEGER
-
-- Delete the note with this id number
-
-### Responses
-
-#### `200 OK`
-
-The note was deleted successfully
+*If you have more questions, please reach out to Brandon Liang on the Testing/Security Team.*
